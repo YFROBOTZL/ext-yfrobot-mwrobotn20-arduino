@@ -1,4 +1,4 @@
-# YFROBOT VALON-I（掌控板）
+# YFROBOT 4轮麦轮小车
 
 ![](./arduinoC/_images/featured.png)
 
@@ -8,7 +8,7 @@
 
 本扩展库为Mind+软件设计。
 
-支持YFROBOT Valon-I 智能编程小车（掌控板）。
+支持YFROBOT 4轮麦轮智能编程小车（Arduino）。
 
 
 ## 相关链接 Links
@@ -31,11 +31,9 @@ MIT
 
 ## 硬件支持列表 Hardware Support
 
-请注意，不同主板，小车硬件不同。
-
 主板型号                | 实时模式    | ArduinoC   | MicroPython    | 备注
 ------------------ | :----------: | :----------: | :---------: | -----
-mpython掌控板        |             |        √已测试      |             | 
+Arduino UNO        |             |        √未测试      |             | 
 
 
 ## 更新日志 Release Note
