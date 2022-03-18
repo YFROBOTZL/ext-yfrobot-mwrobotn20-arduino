@@ -10,318 +10,178 @@
  * @date  2022-03-18
 */
 
-enum LEDONOFF {
-    //% block="OFF"
-    LOW,
-    //% block="ON"
-    HIGH
-}
-
-enum LEDN {
-    //% block="D1"
-    P5,
+enum MWADDRESS {
+    //% block="D0"
+    D0,
     //% block="D2"
-    P11
+    D2,
+    //% block="D4"
+    D4,
+    //% block="D6"
+    D6,
+    //% block="D8"
+    D8,
+    //% block="DA"
+    DA,
+    //% block="DC"
+    DC,
+    //% block="DE"
+    DE,
+    //% block="E0"
+    E0,
+    //% block="E2"
+    E2,
+    //% block="E4"
+    E4,
+    //% block="E6"
+    E6,
+    //% block="E8"
+    E8,
+    //% block="EA"
+    EA,
+    //% block="EC"
+    EC,
+    //% block="EE"
+    EE,
+    //% block="F8"
+    F8,
+    //% block="FA"
+    FA,
+    //% block="FC"
+    FC,
+    //% block="FE"
+    FE,             
 }
 
-enum CARDIR {
-    //% block="ADVANCE"
-    0,
-    //% block="BACKWARD"
-    1,
-    //% block="TURNRIGHT"
-    2,
-    //% block="TURNLEFT"
-    3
-}
+//% color="#45b787" iconWidth=50 iconHeight=40
+namespace mwrobot {
 
-enum MOTORN {
-    //% block="RIGHT"
-    0,
-    //% block="LEFT"
-    1
-}
+    //% block="4wd MW robot M1 [SPEEDM1] M2 [SPEEDM2] M3 [SPEEDM3] M4 [SPEEDM4] " blockType="command"
+    //% SPEEDM1.shadow="range"   SPEEDM1.params.min=-255    SPEEDM1.params.max=255    SPEEDM1.defl=200
+    //% SPEEDM2.shadow="range"   SPEEDM2.params.min=-255    SPEEDM2.params.max=255    SPEEDM2.defl=200
+    //% SPEEDM3.shadow="range"   SPEEDM3.params.min=-255    SPEEDM3.params.max=255    SPEEDM3.defl=200
+    //% SPEEDM4.shadow="range"   SPEEDM4.params.min=-255    SPEEDM4.params.max=255    SPEEDM4.defl=200
+    export function MWDrive(parameter: any, block: any) {
+        let speedM1 = parameter.SPEEDM1.code;
+        let speedM2 = parameter.SPEEDM2.code;
+        let speedM3 = parameter.SPEEDM3.code;
+        let speedM4 = parameter.SPEEDM4.code;
 
-enum MOTORDIR {
-    //% block="FORWARD"
-    0,
-    //% block="REVERSE"
-    1
-}
+        Generator.addInclude(`definemwmotor`, `PROGMEM void mwMotorDrive(int m1Speed, int m2Speed, int m3Speed, int m4Speed); // 麦轮电机控制函数`)
+        Generator.addInclude(`definemwmotorFun`, `/*\n`+
+            `  麦轮驱动电机函数\n`+
+            `  参数：m1Speed - 1电机速度 m2Speed - 2电机速度\n`+
+            `       m3Speed - 3电机速度 m4Speed - 4电机速度 （取值范围：-255 ~ 255）\n`+
+            `*/\n`+
+            `void mwMotorDrive(int m1Speed, int m2Speed, int m3Speed, int m4Speed) {\n`+
+            `  if (m1Speed > 0)\n`+
+            `    digitalWrite(M1PinDir, LOW);\n`+
+            `  else if (m1Speed < 0)\n`+
+            `    digitalWrite(M1PinDir, HIGH);\n`+
+            `  analogWrite(M1PinSpeed, abs(m1Speed));\n`+
+            `  \n`+
+            `  if (m2Speed > 0)\n`+
+            `    digitalWrite(M2PinDir, HIGH);\n`+
+            `  else if (m2Speed < 0)\n`+
+            `    digitalWrite(M2PinDir, LOW);\n`+
+            `  analogWrite(M2PinSpeed, abs(m2Speed));\n`+
+            `  \n`+
+            `  if (m3Speed > 0)\n`+
+            `    digitalWrite(M3PinDir, LOW);\n`+
+            `  else if (m3Speed < 0)\n`+
+            `    digitalWrite(M3PinDir, HIGH);\n`+
+            `  analogWrite(M3PinSpeed, abs(m3Speed));\n`+
+            `  \n`+
+            `  if (m4Speed > 0)\n`+
+            `    digitalWrite(M4PinDir, HIGH);\n`+
+            `  else if (m4Speed < 0)\n`+
+            `    digitalWrite(M4PinDir, LOW);\n`+
+            `  analogWrite(M4PinSpeed, abs(m4Speed));\n`+
+            `}`
+        );
 
-enum ENDIS {
-    //% block="ENABLE"
-    HIGH,
-    //% block="DISABLE"
-    LOW
-}
-
-enum PINP {
-    //% block="left"
-    P0,
-    //% block="middle"
-    P2,
-    //% block="right"
-    P3
-}
-
-enum PSSTATE {
-    //% block="○●○"
-    S0,
-    //% block="●○○"
-    S1,
-    //% block="○○●"
-    S2,
-    //% block="●●●"
-    S3,
-    //% block="○○○"
-    S4,
-    //% block="●●○"
-    S5,
-    //% block="○●●"
-    S6,
-}
-
-//% color="#0eb83a" iconWidth=50 iconHeight=40
-namespace valon {
-
-    //% block="set [LED] output [LEDSTATE]" blockType="command"
-    //% LED.shadow="dropdown" LED.options="LEDN" LED.defl="LEDN.P5"
-    //% LEDSTATE.shadow="dropdown" LEDSTATE.options="LEDONOFF" LEDSTATE.defl="LEDONOFF.HIGH"
-    export function LED(parameter: any, block: any) {
-        let led = parameter.LED.code;
-        let ledState = parameter.LEDSTATE.code;
-        Generator.addCode(`digitalWrite(${led},${ledState});`);
+        Generator.addCode(`mwMotorDrive(${speedM1},${speedM2},${speedM3},${speedM4});`);
     }
-
-    // // block="set [OUTPUTMODULEANALOG] on [OAMPIN] output [OAMSTATE]" blockType="command"
-    // // OUTPUTMODULEANALOG.shadow="dropdown" OUTPUTMODULEANALOG.options="OMAANALOG" OUTPUTMODULEANALOG.defl="OMAANALOG.LED"
-    // // OAMPIN.shadow="dropdown" OAMPIN.options="PIN_AnalogWrite"
-    // // OAMSTATE.shadow="range"   OAMSTATE.params.min=0    OAMSTATE.params.max=255    OAMSTATE.defl=200
-    // export function outputAnalogModule(parameter: any, block: any) {
-    //     let outputModule = parameter.OUTPUTMODULEANALOG.code;
-    //     let outputModulePin = parameter.OAMPIN.code;
-    //     let outputModuleState = parameter.OAMSTATE.code;
-    //     if(Generator.board === 'esp32'){//如果是掌控板，生成如下代码
-    //         Generator.addCode(`pwmv = map(${outputModuleState}, 0, 255, 0, 1023);`);
-    //         Generator.addCode(`analogWrite(${outputModulePin},pwmv);`);
-    //     }else{
-    //         Generator.addCode(`analogWrite(${outputModulePin},${outputModuleState});`);
-    //     }
-    // }
-
-    //% block="Valon robot at [SPEED] speed [DIR]" blockType="command"
-    //% SPEED.shadow="range"   SPEED.params.min=0    SPEED.params.max=255    SPEED.defl=200
-    //% DIR.shadow="dropdown" DIR.options="CARDIR" DIR.defl="CARDIR.0"
-    export function carDrive(parameter: any, block: any) {
-        let speed = parameter.SPEED.code;
-        let dir = parameter.DIR.code;
-        Generator.addInclude(`definevaloncar`, `PROGMEM void carDrive(int dir, int speed); // valon car 控制函数`)
-        Generator.addInclude(`definevaloncarFun`, `// valon car 控制函数\n`+
-            `void carDrive(int dir, int speed) {\n`+
-            `  if (dir == 0) {          // 前进\n`+
-            `    motorDrive(0, speed, 0);\n`+
-            `    motorDrive(1, speed, 0);\n`+
-            `  } else if (dir == 1) {   // 后退\n`+
-            `    motorDrive(0, speed, 1);\n`+
-            `    motorDrive(1, speed, 1);\n`+
-            `  } else if (dir == 2) {   // 右转\n`+
-            `    motorDrive(0, speed/2, 0);\n`+
-            `    motorDrive(1, speed, 0);\n`+
-            `  } else if (dir == 3) {   // 左转\n`+
-            `    motorDrive(0, speed, 0);\n`+
-            `    motorDrive(1, speed/2, 0);\n`+
-            `  }\n`+
+        
+    //% block="4wd MW robot STOP" blockType="command"
+    export function MWStop(parameter: any, block: any) {
+        Generator.addInclude(`definemwmotor`, `PROGMEM void mwMotorDrive(int m1Speed, int m2Speed, int m3Speed, int m4Speed); // 麦轮电机控制函数`)
+        Generator.addInclude(`definemwmotorFun`, `/*\n`+
+            `  麦轮驱动电机函数\n`+
+            `  参数：m1Speed - 1电机速度 m2Speed - 2电机速度\n`+
+            `       m3Speed - 3电机速度 m4Speed - 4电机速度 （取值范围：-255 ~ 255）\n`+
+            `*/\n`+
+            `void mwMotorDrive(int m1Speed, int m2Speed, int m3Speed, int m4Speed) {\n`+
+            `  if (m1Speed > 0)\n`+
+            `    digitalWrite(M1PinDir, LOW);\n`+
+            `  else if (m1Speed < 0)\n`+
+            `    digitalWrite(M1PinDir, HIGH);\n`+
+            `  analogWrite(M1PinSpeed, abs(m1Speed));\n`+
+            `  \n`+
+            `  if (m2Speed > 0)\n`+
+            `    digitalWrite(M2PinDir, HIGH);\n`+
+            `  else if (m2Speed < 0)\n`+
+            `    digitalWrite(M2PinDir, LOW);\n`+
+            `  analogWrite(M2PinSpeed, abs(m2Speed));\n`+
+            `  \n`+
+            `  if (m3Speed > 0)\n`+
+            `    digitalWrite(M3PinDir, LOW);\n`+
+            `  else if (m3Speed < 0)\n`+
+            `    digitalWrite(M3PinDir, HIGH);\n`+
+            `  analogWrite(M3PinSpeed, abs(m3Speed));\n`+
+            `  \n`+
+            `  if (m4Speed > 0)\n`+
+            `    digitalWrite(M4PinDir, HIGH);\n`+
+            `  else if (m4Speed < 0)\n`+
+            `    digitalWrite(M4PinDir, LOW);\n`+
+            `  analogWrite(M4PinSpeed, abs(m4Speed));\n`+
             `}`
         );
 
-        Generator.addInclude(`definevalonmotor`, `PROGMEM void motorDrive(int mot, int speed, int dir); // valon motor 控制函数`)
-        Generator.addInclude(`definevalonmotorFun`, `// valon motor 控制函数\n`+
-            `void motorDrive(int mot, int speed, int dir) {\n`+
-            `  int sp = map(speed, 0, 255, 0, 1023);\n`+
-            `  if (mot == 0) {    // 右电机\n`+
-            `    if (dir == 0) {  // 正转\n`+
-            `      digitalWrite(P16, LOW);\n`+
-            `      analogWrite(P15, sp);\n`+
-            `    } else {         // 反转\n`+
-            `      digitalWrite(P16, HIGH);\n`+
-            `      analogWrite(P15, sp);\n`+
-            `    }\n`+
-            `  } else {           // 左电机\n`+
-            `    if (dir == 0) {  // 正转\n`+
-            `      digitalWrite(P13, LOW);\n`+
-            `      analogWrite(P14, sp);\n`+
-            `    } else {         // 反转\n`+
-            `      digitalWrite(P13, HIGH);\n`+
-            `      analogWrite(P14, sp);\n`+
-            `    }\n`+
-            `  }\n`+
-            `}`
-        );
-
-        Generator.addCode(`carDrive(${dir},${speed});`);
+        Generator.addCode(`mwMotorDrive(0,0,0,0);`);
     }
     
-    //% block="Valon robot STOP" blockType="command"
-    export function carStop(parameter: any, block: any) {
-        Generator.addInclude(`definevaloncar`, `PROGMEM void carDrive(int dir, int speed); // valon car 控制函数`)
-        Generator.addInclude(`definevaloncarFun`, `// valon car 控制函数\n`+
-            `void carDrive(int dir, int speed) {\n`+
-            `  if (dir == 0) {          // 前进\n`+
-            `    motorDrive(0, speed, 0);\n`+
-            `    motorDrive(1, speed, 0);\n`+
-            `  } else if (dir == 1) {   // 后退\n`+
-            `    motorDrive(0, speed, 1);\n`+
-            `    motorDrive(1, speed, 1);\n`+
-            `  } else if (dir == 2) {   // 右转\n`+
-            `    motorDrive(0, speed/2, 0);\n`+
-            `    motorDrive(1, speed, 0);\n`+
-            `  } else if (dir == 3) {   // 左转\n`+
-            `    motorDrive(0, speed, 0);\n`+
-            `    motorDrive(1, speed/2, 0);\n`+
-            `  }\n`+
+    //% block="read ulrasonic sensor address [ADDR] Unit mm" blockType="reporter"
+    //% ADDR.shadow="dropdown" ADDR.options="MWADDRESS" ADDR.defl="MWADDRESS.E8"
+    export function readUlrasonicSensor_sr09(parameter: any, block: any) {
+
+        let addr = parameter.ADDR.code;
+        Generator.addInclude(`Wire`, `#include <Wire.h>`)
+
+        Generator.addInclude(`definemwsr09send`, `PROGMEM void SR09_send_command(byte address, byte reg, byte command); // SR09 写指令`)
+        Generator.addInclude(`definemwsr09sendFun`, `// 写指令\n`+
+            `void SR09_send_command(byte address, byte reg, byte command) {  // send the command to SR09\n`+
+            `  Wire.beginTransmission(address);    // start the transmission with SR09\n`+
+            `  Wire.write(reg);                    // register 2\n`+
+            `  Wire.write(command);                // send the command to the register 2\n`+
+            `  Wire.endTransmission();             // end of transmission\n`+
             `}`
         );
 
-        Generator.addInclude(`definevalonmotor`, `PROGMEM void motorDrive(int mot, int speed, int dir); // valon motor 控制函数`)
-        Generator.addInclude(`definevalonmotorFun`, `// valon motor 控制函数\n`+
-            `void motorDrive(int mot, int speed, int dir) {\n`+
-            `  int sp = map(speed, 0, 255, 0, 1023);\n`+
-            `  if (mot == 0) {    // 右电机\n`+
-            `    if (dir == 0) {  // 正转\n`+
-            `      digitalWrite(P16, LOW);\n`+
-            `      analogWrite(P15, sp);\n`+
-            `    } else {         // 反转\n`+
-            `      digitalWrite(P16, HIGH);\n`+
-            `      analogWrite(P15, sp);\n`+
-            `    }\n`+
-            `  } else {           // 左电机\n`+
-            `    if (dir == 0) {  // 正转\n`+
-            `      digitalWrite(P13, LOW);\n`+
-            `      analogWrite(P14, sp);\n`+
-            `    } else {         // 反转\n`+
-            `      digitalWrite(P13, HIGH);\n`+
-            `      analogWrite(P14, sp);\n`+
-            `    }\n`+
-            `  }\n`+
+        Generator.addInclude(`definemwsr09read`, `PROGMEM word SR09_read_data(byte address, byte reg, byte command); // SR09 读数据`)
+        Generator.addInclude(`definemwsr09readFun`, `// 读数据\n`+
+            `word SR09_read_data(byte address, byte reg, byte command) { // sending the command and read the data in the register\n`+
+            `  word temp_reading;\n`+
+            `  // step 1: instruct sensor to read echoes\n`+
+            `  SR09_send_command(address, reg, command);           // send the command\n`+
+            `  // step 2: wait for readings to happen\n`+
+            `  delay(88);                          // wait at least 87 milliseconds\n`+
+            `  // step 3: instruct sensor to return a particular echo reading\n`+
+            `  Wire.beginTransmission(address);    // start to transmit with SR09\n`+
+            `  Wire.write(0x02);             // register 2 is the gate of receiving the data\n`+
+            `  Wire.endTransmission();             // stop transmitting\n`+
+            `  // step 4: request reading from sensor\n`+
+            `  Wire.requestFrom(uint8_t(address), uint8_t(2));       // request the data in the 2nd and third register of SR09\n`+
+            `  // step 5: receive reading from sensor\n`+
+            `  while ( Wire.available() < 2) {}    // wait the register available\n`+
+            `  temp_reading = (Wire.read()) << 8;  // read register 2 and shift it to upper byte.\n`+
+            `  temp_reading |= Wire.read();        // read the register 3 to lower byte\n`+
+            `  return temp_reading;                // return as a 16bit data\n`+
             `}`
         );
+        Generator.addSetup(`sr09_init`, `SR09_send_command(0x${addr}>>1, 0x02, 0X71);   // powered by USB`);
 
-        Generator.addCode(`carDrive(0,0);`);
-    }
-
-    //% block="Valon robot [MOT] Motor at [SPEED] speed [DIR]" blockType="command"
-    //% MOT.shadow="dropdown" MOT.options="MOTORN" MOT.defl="MOTORN.0"
-    //% SPEED.shadow="range"   SPEED.params.min=0    SPEED.params.max=255    SPEED.defl=200
-    //% DIR.shadow="dropdown" DIR.options="MOTORDIR" DIR.defl="MOTORDIR.0"
-    export function motorDrive(parameter: any, block: any) {
-        let mot = parameter.MOT.code;
-        let speed = parameter.SPEED.code;
-        let dir = parameter.DIR.code;
-
-        Generator.addInclude(`definevalonmotor`, `PROGMEM void motorDrive(int mot, int speed, int dir); // valon motor 控制函数`)
-        Generator.addInclude(`definevalonmotorFun`, `// valon motor 控制函数\n`+
-            `void motorDrive(int mot, int speed, int dir) {\n`+
-            `  int sp = map(speed, 0, 255, 0, 1023);\n`+
-            `  if (mot == 0) {    // 右电机\n`+
-            `    if (dir == 0) {  // 正转\n`+
-            `      digitalWrite(P16, LOW);\n`+
-            `      analogWrite(P15, sp);\n`+
-            `    } else {         // 反转\n`+
-            `      digitalWrite(P16, HIGH);\n`+
-            `      analogWrite(P15, sp);\n`+
-            `    }\n`+
-            `  } else {           // 左电机\n`+
-            `    if (dir == 0) {  // 正转\n`+
-            `      digitalWrite(P13, LOW);\n`+
-            `      analogWrite(P14, sp);\n`+
-            `    } else {         // 反转\n`+
-            `      digitalWrite(P13, HIGH);\n`+
-            `      analogWrite(P14, sp);\n`+
-            `    }\n`+
-            `  }\n`+
-            `}`
-        );
-
-        Generator.addCode(`motorDrive(${mot},${speed},${dir});`);
-    }
-    
-    //% block="Valon robot [MOT] Motor Stop" blockType="command"
-    //% MOT.shadow="dropdown" MOT.options="MOTORN" MOT.defl="MOTORN.0"
-    export function motorStop(parameter: any, block: any) {
-        let mot = parameter.MOT.code;
-        Generator.addInclude(`definevalonmotor`, `PROGMEM void motorDrive(int mot, int speed, int dir); // valon motor 控制函数`)
-        Generator.addInclude(`definevalonmotorFun`, `// valon motor 控制函数\n`+
-            `void motorDrive(int mot, int speed, int dir) {\n`+
-            `  int sp = map(speed, 0, 255, 0, 1023);\n`+
-            `  if (mot == 0) {    // 右电机\n`+
-            `    if (dir == 0) {  // 正转\n`+
-            `      digitalWrite(P16, LOW);\n`+
-            `      analogWrite(P15, sp);\n`+
-            `    } else {         // 反转\n`+
-            `      digitalWrite(P16, HIGH);\n`+
-            `      analogWrite(P15, sp);\n`+
-            `    }\n`+
-            `  } else {           // 左电机\n`+
-            `    if (dir == 0) {  // 正转\n`+
-            `      digitalWrite(P13, LOW);\n`+
-            `      analogWrite(P14, sp);\n`+
-            `    } else {         // 反转\n`+
-            `      digitalWrite(P13, HIGH);\n`+
-            `      analogWrite(P14, sp);\n`+
-            `    }\n`+
-            `  }\n`+
-            `}`
-        );
-
-        Generator.addCode(`motorDrive(${mot},0,0);`);
-    }
-
-    //% block="Valon robot Patrol sensor [ENABLE]" blockType="command"
-    //% ENABLE.shadow="dropdown" ENABLE.options="ENDIS" ENABLE.defl="ENDIS.HIGH"
-    export function patrolSensorEnable(parameter: any, block: any) {
-        let en = parameter.ENABLE.code;
-        Generator.addCode(`digitalWrite(P1, ${en});`);
-    }
-
-    //% block="[PSN] patrol sensor on black line" blockType="boolean"
-    //% PSN.shadow="dropdown" PSN.options="PINP"" PSN.defl="PINP.P0"
-    export function readPatrolSensor(parameter: any, block: any) {
-        let psn = parameter.PSN.code;
-        if(psn === `P3`){
-            Generator.addCode(`(analogRead(${psn}) == 0)`);
-        } else {
-            Generator.addCode(`(digitalRead(${psn}) == 0)`);
-        }
-    }
-
-    //% block="patrol sensors state [PSNS]" blockType="boolean"
-    //% PSNS.shadow="dropdown" PSNS.options="PSSTATE"" PSNS.defl="PSSTATE.S0"
-    export function readPatrolSensors(parameter: any, block: any) {
-        let psns = parameter.PSNS.code;
-        if(psns === `S0`) {
-            Generator.addCode(`(digitalRead(P0) != 0)&&(digitalRead(P2) == 0)&&(analogRead(P3) != 0)`);
-        } else if(psns === `S1`) {
-            Generator.addCode(`(digitalRead(P0) == 0)&&(digitalRead(P2) != 0)&&(analogRead(P3) != 0)`);
-        } else if(psns === `S2`) {
-            Generator.addCode(`(digitalRead(P0) != 0)&&(digitalRead(P2) != 0)&&(analogRead(P3) == 0)`);
-        } else if(psns === `S3`) {
-            Generator.addCode(`(digitalRead(P0) == 0)&&(digitalRead(P2) == 0)&&(analogRead(P3) == 0)`);
-        } else if(psns === `S4`) {
-            Generator.addCode(`(digitalRead(P0) != 0)&&(digitalRead(P2) != 0)&&(analogRead(P3) != 0)`);
-        } else if(psns === `S5`) {
-            Generator.addCode(`(digitalRead(P0) == 0)&&(digitalRead(P2) == 0)&&(analogRead(P3) != 0)`);
-        } else if(psns === `S6`) {
-            Generator.addCode(`(digitalRead(P0) != 0)&&(digitalRead(P2) == 0)&&(analogRead(P3) == 0)`);
-        }
-    }
-
-    
-    //% block="read ulrasonic sensor Unit cm" blockType="reporter"
-    export function readUlrasonicSensor(parameter: any, block: any) {
-        Generator.addInclude("include_DFRobot_URM10", `#include <DFRobot_URM10.h>`);
-        Generator.addObject("object_DFRobot_URM10_valon", `DFRobot_URM10`, `valon_sr04;`);
-        Generator.addCode(`valon_sr04.getDistanceCM(P8,P9)`);
+        Generator.addCode(`SR09_read_data(0x${addr}>>1, 0x02, 0xBC);`);
     }
 
 }
