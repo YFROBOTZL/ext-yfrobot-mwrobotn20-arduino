@@ -99,28 +99,28 @@ namespace mwrobot {
             `*/\n`+
             `void mwMotorDrive(int m1Speed, int m2Speed, int m3Speed, int m4Speed) {\n`+
             `  if (m1Speed > 0)\n`+
-            `    digitalWrite(M1PinDir, LOW);\n`+
+            `    digitalWrite(4, LOW);\n`+
             `  else if (m1Speed < 0)\n`+
-            `    digitalWrite(M1PinDir, HIGH);\n`+
-            `  analogWrite(M1PinSpeed, abs(m1Speed));\n`+
+            `    digitalWrite(4, HIGH);\n`+
+            `  analogWrite(3, abs(m1Speed));\n`+
             `  \n`+
             `  if (m2Speed > 0)\n`+
-            `    digitalWrite(M2PinDir, HIGH);\n`+
+            `    digitalWrite(7, HIGH);\n`+
             `  else if (m2Speed < 0)\n`+
-            `    digitalWrite(M2PinDir, LOW);\n`+
-            `  analogWrite(M2PinSpeed, abs(m2Speed));\n`+
+            `    digitalWrite(7, LOW);\n`+
+            `  analogWrite(5, abs(m2Speed));\n`+
             `  \n`+
             `  if (m3Speed > 0)\n`+
-            `    digitalWrite(M3PinDir, LOW);\n`+
+            `    digitalWrite(8, LOW);\n`+
             `  else if (m3Speed < 0)\n`+
-            `    digitalWrite(M3PinDir, HIGH);\n`+
-            `  analogWrite(M3PinSpeed, abs(m3Speed));\n`+
+            `    digitalWrite(8, HIGH);\n`+
+            `  analogWrite(6, abs(m3Speed));\n`+
             `  \n`+
             `  if (m4Speed > 0)\n`+
-            `    digitalWrite(M4PinDir, HIGH);\n`+
+            `    digitalWrite(12, HIGH);\n`+
             `  else if (m4Speed < 0)\n`+
-            `    digitalWrite(M4PinDir, LOW);\n`+
-            `  analogWrite(M4PinSpeed, abs(m4Speed));\n`+
+            `    digitalWrite(12, LOW);\n`+
+            `  analogWrite(11, abs(m4Speed));\n`+
             `}`
         );
 
@@ -143,28 +143,28 @@ namespace mwrobot {
             `*/\n`+
             `void mwMotorDrive(int m1Speed, int m2Speed, int m3Speed, int m4Speed) {\n`+
             `  if (m1Speed > 0)\n`+
-            `    digitalWrite(M1PinDir, LOW);\n`+
+            `    digitalWrite(4, LOW);\n`+
             `  else if (m1Speed < 0)\n`+
-            `    digitalWrite(M1PinDir, HIGH);\n`+
-            `  analogWrite(M1PinSpeed, abs(m1Speed));\n`+
+            `    digitalWrite(4, HIGH);\n`+
+            `  analogWrite(3, abs(m1Speed));\n`+
             `  \n`+
             `  if (m2Speed > 0)\n`+
-            `    digitalWrite(M2PinDir, HIGH);\n`+
+            `    digitalWrite(7, HIGH);\n`+
             `  else if (m2Speed < 0)\n`+
-            `    digitalWrite(M2PinDir, LOW);\n`+
-            `  analogWrite(M2PinSpeed, abs(m2Speed));\n`+
+            `    digitalWrite(7, LOW);\n`+
+            `  analogWrite(5, abs(m2Speed));\n`+
             `  \n`+
             `  if (m3Speed > 0)\n`+
-            `    digitalWrite(M3PinDir, LOW);\n`+
+            `    digitalWrite(8, LOW);\n`+
             `  else if (m3Speed < 0)\n`+
-            `    digitalWrite(M3PinDir, HIGH);\n`+
-            `  analogWrite(M3PinSpeed, abs(m3Speed));\n`+
+            `    digitalWrite(8, HIGH);\n`+
+            `  analogWrite(6, abs(m3Speed));\n`+
             `  \n`+
             `  if (m4Speed > 0)\n`+
-            `    digitalWrite(M4PinDir, HIGH);\n`+
+            `    digitalWrite(12, HIGH);\n`+
             `  else if (m4Speed < 0)\n`+
-            `    digitalWrite(M4PinDir, LOW);\n`+
-            `  analogWrite(M4PinSpeed, abs(m4Speed));\n`+
+            `    digitalWrite(12, LOW);\n`+
+            `  analogWrite(11, abs(m4Speed));\n`+
             `}`
         );
 
@@ -201,28 +201,28 @@ namespace mwrobot {
             `*/\n`+
             `void mwMotorDrive(int m1Speed, int m2Speed, int m3Speed, int m4Speed) {\n`+
             `  if (m1Speed > 0)\n`+
-            `    digitalWrite(M1PinDir, LOW);\n`+
+            `    digitalWrite(4, LOW);\n`+
             `  else if (m1Speed < 0)\n`+
-            `    digitalWrite(M1PinDir, HIGH);\n`+
-            `  analogWrite(M1PinSpeed, abs(m1Speed));\n`+
+            `    digitalWrite(4, HIGH);\n`+
+            `  analogWrite(3, abs(m1Speed));\n`+
             `  \n`+
             `  if (m2Speed > 0)\n`+
-            `    digitalWrite(M2PinDir, HIGH);\n`+
+            `    digitalWrite(7, HIGH);\n`+
             `  else if (m2Speed < 0)\n`+
-            `    digitalWrite(M2PinDir, LOW);\n`+
-            `  analogWrite(M2PinSpeed, abs(m2Speed));\n`+
+            `    digitalWrite(7, LOW);\n`+
+            `  analogWrite(5, abs(m2Speed));\n`+
             `  \n`+
             `  if (m3Speed > 0)\n`+
-            `    digitalWrite(M3PinDir, LOW);\n`+
+            `    digitalWrite(8, LOW);\n`+
             `  else if (m3Speed < 0)\n`+
-            `    digitalWrite(M3PinDir, HIGH);\n`+
-            `  analogWrite(M3PinSpeed, abs(m3Speed));\n`+
+            `    digitalWrite(8, HIGH);\n`+
+            `  analogWrite(6, abs(m3Speed));\n`+
             `  \n`+
             `  if (m4Speed > 0)\n`+
-            `    digitalWrite(M4PinDir, HIGH);\n`+
+            `    digitalWrite(12, HIGH);\n`+
             `  else if (m4Speed < 0)\n`+
-            `    digitalWrite(M4PinDir, LOW);\n`+
-            `  analogWrite(M4PinSpeed, abs(m4Speed));\n`+
+            `    digitalWrite(12, LOW);\n`+
+            `  analogWrite(11, abs(m4Speed));\n`+
             `}`
         );
 
