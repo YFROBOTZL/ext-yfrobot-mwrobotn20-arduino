@@ -1,5 +1,16 @@
 {
     "mwrobot.MWDrive|block": "4轮麦轮小车电机 M1 [SPEEDM1] M2 [SPEEDM2] M3 [SPEEDM3] M4 [SPEEDM4]",
+    "mwrobot.MWDIR.0|menu": "前进",
+    "mwrobot.MWDIR.1|menu": "后退",
+    "mwrobot.MWDIR.2|menu": "右旋转",
+    "mwrobot.MWDIR.3|menu": "左旋转",
+    "mwrobot.MWDIR.4|menu": "右平移",
+    "mwrobot.MWDIR.5|menu": "左平移",
+    "mwrobot.MWDIR.6|menu": "右前移",
+    "mwrobot.MWDIR.7|menu": "左前移",
+    "mwrobot.MWDIR.8|menu": "右后移",
+    "mwrobot.MWDIR.9|menu": "左后移",
+    "mwrobot.MWMove|block": "4轮麦轮小车以[SPE]速度[DIR]",
     "mwrobot.MWStop|block": "4轮麦轮小车停止",
     "mwrobot.readUlrasonicSensor_sr09|block": "读取超声波距离地址[ADDR]单位mm"
 }

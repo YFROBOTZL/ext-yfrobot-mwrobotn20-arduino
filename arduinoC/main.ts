@@ -10,6 +10,30 @@
  * @date  2022-03-18
 */
 
+enum MWDIR {
+    //% block="FORWARD"
+    0,
+    //% block="BACK OFF"
+    1,
+    //% block="RIGHT ROTATION"
+    2,
+    //% block="LEFT ROTATION"
+    3,
+    //% block="RIGHT TRANSLATION"
+    4,
+    //% block="LEFT TRANSLATION"
+    5,
+    //% block="MOVE RIGHT FORWARD"
+    6,
+    //% block="MOVE LEFT FORWARD"
+    7,
+    //% block="MOVE RIGHT BACK"
+    8,
+    //% block="MOVE LEFT BACK"
+    9
+
+}
+
 enum MWADDRESS {
     //% block="D0"
     D0,
@@ -70,8 +94,8 @@ namespace mwrobot {
         Generator.addInclude(`definemwmotor`, `PROGMEM void mwMotorDrive(int m1Speed, int m2Speed, int m3Speed, int m4Speed); // 麦轮电机控制函数`)
         Generator.addInclude(`definemwmotorFun`, `/*\n`+
             `  麦轮驱动电机函数\n`+
-            `  参数：m1Speed - 1电机速度 m2Speed - 2电机速度\n`+
-            `       m3Speed - 3电机速度 m4Speed - 4电机速度 （取值范围：-255 ~ 255）\n`+
+            `  参数:m1Speed - 1电机速度 m2Speed - 2电机速度\n`+
+            `       m3Speed - 3电机速度 m4Speed - 4电机速度 (取值范围：-255 ~ 255)\n`+
             `*/\n`+
             `void mwMotorDrive(int m1Speed, int m2Speed, int m3Speed, int m4Speed) {\n`+
             `  if (m1Speed > 0)\n`+
@@ -102,14 +126,78 @@ namespace mwrobot {
 
         Generator.addCode(`mwMotorDrive(${speedM1},${speedM2},${speedM3},${speedM4});`);
     }
+
+    //% block="4wd MW robot [DIR] at [SPE] speed" blockType="command"
+    //% DIR.shadow="dropdown" DIR.options="MWDIR" ADDR.defl="MWDIR.FORWARD"
+    //% SPE.shadow="range"   SPE.params.min=0    SPE.params.max=255    SPE.defl=200
+    export function MWMove(parameter: any, block: any) {
+
+        let dir = parameter.DIR.code;
+        let spe = parameter.SPE.code;
+
+        Generator.addInclude(`definemwmotor`, `PROGMEM void mwMotorDrive(int m1Speed, int m2Speed, int m3Speed, int m4Speed); // 麦轮电机控制函数`)
+        Generator.addInclude(`definemwmotorFun`, `/*\n`+
+            `  麦轮驱动电机函数\n`+
+            `  参数:m1Speed - 1电机速度 m2Speed - 2电机速度\n`+
+            `       m3Speed - 3电机速度 m4Speed - 4电机速度 (取值范围：-255 ~ 255)\n`+
+            `*/\n`+
+            `void mwMotorDrive(int m1Speed, int m2Speed, int m3Speed, int m4Speed) {\n`+
+            `  if (m1Speed > 0)\n`+
+            `    digitalWrite(M1PinDir, LOW);\n`+
+            `  else if (m1Speed < 0)\n`+
+            `    digitalWrite(M1PinDir, HIGH);\n`+
+            `  analogWrite(M1PinSpeed, abs(m1Speed));\n`+
+            `  \n`+
+            `  if (m2Speed > 0)\n`+
+            `    digitalWrite(M2PinDir, HIGH);\n`+
+            `  else if (m2Speed < 0)\n`+
+            `    digitalWrite(M2PinDir, LOW);\n`+
+            `  analogWrite(M2PinSpeed, abs(m2Speed));\n`+
+            `  \n`+
+            `  if (m3Speed > 0)\n`+
+            `    digitalWrite(M3PinDir, LOW);\n`+
+            `  else if (m3Speed < 0)\n`+
+            `    digitalWrite(M3PinDir, HIGH);\n`+
+            `  analogWrite(M3PinSpeed, abs(m3Speed));\n`+
+            `  \n`+
+            `  if (m4Speed > 0)\n`+
+            `    digitalWrite(M4PinDir, HIGH);\n`+
+            `  else if (m4Speed < 0)\n`+
+            `    digitalWrite(M4PinDir, LOW);\n`+
+            `  analogWrite(M4PinSpeed, abs(m4Speed));\n`+
+            `}`
+        );
+
+        if(dir == `0`){
+            Generator.addCode(`mwMotorDrive(${spe},${spe},${spe},${spe});`);
+        }else if(dir == `1`){
+            Generator.addCode(`mwMotorDrive(0-${spe},0-${spe},0-${spe},0-${spe});`);
+        }else if(dir == `2`){
+            Generator.addCode(`mwMotorDrive(${spe},0-${spe},${spe},0-${spe});`);
+        }else if(dir == `3`){
+            Generator.addCode(`mwMotorDrive(0-${spe},${spe},0-${spe},${spe});`);
+        }else if(dir == `4`){
+            Generator.addCode(`mwMotorDrive(${spe},0-${spe},0-${spe},${spe});`);
+        }else if(dir == `5`){
+            Generator.addCode(`mwMotorDrive(0-${spe},${spe},${spe},0-${spe});`);
+        }else if(dir == `6`){
+            Generator.addCode(`mwMotorDrive(${spe},0,0,${spe});`);
+        }else if(dir == `7`){
+            Generator.addCode(`mwMotorDrive(0,${spe},${spe},0);`);
+        }else if(dir == `8`){
+            Generator.addCode(`mwMotorDrive(0,0-${spe},0-${spe},0);`);
+        }else if(dir == `9`){
+            Generator.addCode(`mwMotorDrive(0-${spe},0,0,0-${spe});`);
+        }
+    }
         
     //% block="4wd MW robot STOP" blockType="command"
     export function MWStop(parameter: any, block: any) {
         Generator.addInclude(`definemwmotor`, `PROGMEM void mwMotorDrive(int m1Speed, int m2Speed, int m3Speed, int m4Speed); // 麦轮电机控制函数`)
         Generator.addInclude(`definemwmotorFun`, `/*\n`+
             `  麦轮驱动电机函数\n`+
-            `  参数：m1Speed - 1电机速度 m2Speed - 2电机速度\n`+
-            `       m3Speed - 3电机速度 m4Speed - 4电机速度 （取值范围：-255 ~ 255）\n`+
+            `  参数:m1Speed - 1电机速度 m2Speed - 2电机速度\n`+
+            `       m3Speed - 3电机速度 m4Speed - 4电机速度 (取值范围：-255 ~ 255)\n`+
             `*/\n`+
             `void mwMotorDrive(int m1Speed, int m2Speed, int m3Speed, int m4Speed) {\n`+
             `  if (m1Speed > 0)\n`+
