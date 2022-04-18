@@ -12,12 +12,11 @@
   "license": "MIT",
   "isBoard": false,
   "id": "yfrobot_mwn20_arduino",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "platform": [ "win", "mac", "web" ],
   "asset": {
     "arduinoC": {
       "dir": "arduinoC/",
-      "version": "0.0.1",
       "board": [ "arduino"],
       "main": "main.ts"
     }
