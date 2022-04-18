@@ -269,7 +269,7 @@ namespace mwrobot {
         );
         Generator.addSetup(`sr09_init`, `SR09_send_command(0x${addr}>>1, 0x02, 0X71);   // powered by USB`);
 
-        Generator.addCode(`SR09_read_data(0x${addr}>>1, 0x02, 0xBC);`);
+        Generator.addCode(`SR09_read_data(0x${addr}>>1, 0x02, 0xBC)`);
     }
 
 }
