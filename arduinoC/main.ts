@@ -267,6 +267,7 @@ namespace mwrobot {
             `  return temp_reading;                // return as a 16bit data\n`+
             `}`
         );
+        Generator.addSetup(`Wire_begin`, `Wire.begin(); `);
         Generator.addSetup(`sr09_init`, `SR09_send_command(0x${addr}>>1, 0x02, 0X71);   // powered by USB`);
 
         Generator.addCode(`SR09_read_data(0x${addr}>>1, 0x02, 0xBC)`);
